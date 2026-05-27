@@ -2,21 +2,481 @@
 
 A technical reference guide to the public classes and functions within the **Arnio** library.
 
+> **Coverage note:** This reference covers all public exports in `arnio.__all__`. If you find a public export that is missing, please open an issue or pull request.
+
 ## Arnio API Reference Index
 
 | Category              | Components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Core Class**        | [**`ArFrame`**](#arframe) • Properties: [`shape`](#shape), [`columns`](#columns), [`dtypes`](#dtypes) • [`is_empty`](#is_empty) • Methods: [`memory_usage`](#memory_usage), [`preview`](#preview), [`select_columns`](#select_columns), [`select_dtypes`](#select_dtypes)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| **I/O**               | [`read_csv`](#read_csv) • [`scan_csv`](#scan_csv) • [`write_csv`](#write_csv) • [`sniff_delimiter`](#sniff_delimiter)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| **Cleaning**          | [`cast_types`](#cast_types) • [`clean`](#clean) • [`clip_numeric`](#clip_numeric) • [`combine_columns`](#combine_columns) • [`drop_columns`](#drop_columns) • [`drop_constant_columns`](#drop_constant_columns) • [`drop_duplicates`](#drop_duplicates) • [`drop_nulls`](#drop_nulls) • [`fill_nulls`](#fill_nulls) • [`filter_rows`](#filter_rows) • [`keep_rows_with_nulls`](#keep_rows_with_nulls) • [`normalize_case`](#normalize_case) • [`normalize_unicode`](#normalize_unicode) • [`rename_columns`](#rename_columns) • [`replace_values`](#replace_values) • [`round_numeric_columns`](#round_numeric_columns) • [`safe_divide_columns`](#safe_divide_columns) • [`strip_whitespace`](#strip_whitespace) • [`trim_column_names`](#trim_column_names) • [`validate_columns_exist`](#validate_columns_exist) |
-| **Conversion**        | [`from_pandas`](#from_pandas) • [`to_pandas`](#to_pandas)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **Core Class**        | [**`ArFrame`**](#arframe); Properties: [`shape`](#shape), [`columns`](#columns), [`dtypes`](#dtypes); [`is_empty`](#is_empty); Methods: [`memory_usage`](#memory_usage), [`preview`](#preview), [`select_columns`](#select_columns), [`select_dtypes`](#select_dtypes)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **I/O**               | [`read_csv`](#read_csv); [`scan_csv`](#scan_csv); [`write_csv`](#write_csv); [`sniff_delimiter`](#sniff_delimiter)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **Cleaning**          | [`cast_types`](#cast_types); [`clean`](#clean); [`clip_numeric`](#clip_numeric); [`combine_columns`](#combine_columns); [`drop_columns`](#drop_columns); [`drop_constant_columns`](#drop_constant_columns); [`drop_duplicates`](#drop_duplicates); [`drop_nulls`](#drop_nulls); [`fill_nulls`](#fill_nulls); [`filter_rows`](#filter_rows); [`keep_rows_with_nulls`](#keep_rows_with_nulls); [`normalize_case`](#normalize_case); [`normalize_unicode`](#normalize_unicode); [`rename_columns`](#rename_columns); [`replace_values`](#replace_values); [`round_numeric_columns`](#round_numeric_columns); [`safe_divide_columns`](#safe_divide_columns); [`strip_whitespace`](#strip_whitespace); [`trim_column_names`](#trim_column_names); [`validate_columns_exist`](#validate_columns_exist) |
+| **Conversion**        | [`from_pandas`](#from_pandas); [`to_pandas`](#to_pandas)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | **Integration**       | [`ArnioPandasAccessor`](#arniopandasaccessor)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| **Pipeline**          | [`pipeline`](#pipeline) • [`register_step`](#register_step)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| **Data Quality**      | [`profile`](#profile) â€¢ [`suggest_cleaning`](#suggest_cleaning) â€¢ [`auto_clean`](#auto_clean) â€¢ [`check_quality_gates`](#check_quality_gates) â€¢ [`DataQualityReport`](#dataqualityreport) â€¢ [`ColumnProfile`](#columnprofile)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| **Schema Validation** | [`Schema`](#schema) â€¢ [`Field`](#field) â€¢ [`validate`](#validate) â€¢ [`ValidationResult`](#validationresult) â€¢ [`ValidationIssue`](#validationissue) â€¢ [`Int64`](#int64) â€¢ [`Float64`](#float64) â€¢ [`String`](#string) â€¢ [`Bool`](#bool) â€¢ [`Email`](#email) â€¢ [`URL`](#url) â€¢ [`CountryCode`](#countrycode) â€¢ [`DateTime`](#datetime)                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| **Custom Exceptions** | [`ArnioError`](#arnioerror) â€¢ [`CsvReadError`](#csvreaderror) â€¢ [`TypeCastError`](#typecasterror) â€¢ [`UnknownStepError`](#unknownsteperror)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **Pipeline**          | [`pipeline`](#pipeline); [`register_step`](#register_step)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **Data Quality**      | [`profile`](#profile); [`suggest_cleaning`](#suggest_cleaning); [`auto_clean`](#auto_clean); [`check_quality_gates`](#check_quality_gates); [`DataQualityReport`](#dataqualityreport); [`ColumnProfile`](#columnprofile)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **Schema Validation** | [`Schema`](#schema); [`Field`](#field); [`validate`](#validate); [`ValidationResult`](#validationresult); [`ValidationIssue`](#validationissue); [`Int64`](#int64); [`Float64`](#float64); [`String`](#string); [`Bool`](#bool); [`Email`](#email); [`URL`](#url); [`CountryCode`](#countrycode); [`DateTime`](#datetime)                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **Custom Exceptions** | [`ArnioError`](#arnioerror); [`CsvReadError`](#csvreaderror); [`TypeCastError`](#typecasterror); [`UnknownStepError`](#unknownsteperror)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+
+Additional coverage is documented in the sections below: [I/O and Conversion](#io-and-conversion), [Cleaning Primitives](#cleaning-primitives), [Pipeline and Step Registry](#pipeline-and-step-registry), [Quality, Schema, and Validation](#quality-schema-and-validation), and [Exceptions](#exceptions).
+
+```python
+import arnio as ar
+
+frame = ar.from_records([
+    {"id": 1, "name": "alice", "score": 95},
+    {"id": 2, "name": "bob", "score": 88},
+])
+baseline = ar.profile(frame)
+current = ar.profile(ar.from_records([
+    {"id": 1, "name": "alice", "score": 95},
+    {"id": 2, "name": "bob", "score": None},
+]))
+schema = ar.Schema({"id": ar.Int64(), "name": ar.String()})
+expected = ar.Schema({"id": ar.Int64()})
+observed = ar.Schema({"id": ar.Int64(), "name": ar.String()})
+```
 
 ---
+
+## Quality, Schema, and Validation
+
+### compare_profiles
+
+`compare_profiles(baseline, current) -> ProfileComparison`
+
+Compares two `DataQualityReport` profiles and flags per-column drift. It returns a `ProfileComparison` object with a `drift_report` dict and a `status_counts` dict.
+
+Raises `TypeError` when either input is not a `DataQualityReport`, and `ValueError` when the two reports do not cover the same columns.
+
+```python
+comparison = ar.compare_profiles(baseline, current)
+print(comparison.status_counts)
+```
+
+### CleanStepRecord
+
+A data class representing a single recorded cleaning step applied during an `auto_clean` run. It records the step name and the keyword arguments used for that step.
+
+```python
+clean, explanation = ar.auto_clean(frame, explain=True)
+print(explanation.steps[0])
+```
+
+### CleanExplanation
+
+A data class that explains why a specific cleaning step was suggested or applied. It captures the target column or columns and a human-readable reason for the step.
+
+```python
+clean, explanation = ar.auto_clean(frame, explain=True)
+print(explanation)
+```
+
+### ProfileComparison
+
+Return type of `compare_profiles()`. It contains `drift_report`, `status_counts`, and a `to_dict()` method. `to_dict()` embeds full left and right profiles, including sample values, so use `profile.to_dict(redact_sample_values=True)` for safer sharing.
+
+```python
+comparison = ar.compare_profiles(baseline, current)
+print(comparison.drift_report["score"])
+```
+
+### QualityGateIssue
+
+Represents a single failed quality gate check returned by `check_quality_gates()`. It records the gate name, the observed value, the threshold, and a human-readable message.
+
+```python
+result = ar.check_quality_gates(baseline, current)
+print(result.issues[0].message)
+```
+
+### QualityGateResult
+
+Return type of `check_quality_gates()`. It holds the baseline and current profiles, the collected `issues`, and the evaluated `thresholds`. The object exposes `passed`, `summary()`, `to_dict()`, `to_markdown()`, and `raise_for_failures()`.
+
+```python
+result = ar.check_quality_gates(baseline, current)
+print(result.passed)
+```
+
+### Date
+
+`Date(nullable=True, unique=False, severity="error", required_if=None) -> Field`
+
+Schema field type that validates strict `YYYY-MM-DD` calendar dates.
+
+Raises `ValueError` or `TypeError` for invalid field options.
+
+```python
+schema = ar.Schema({"signup_date": ar.Date(nullable=False)})
+```
+
+### CurrencyCode
+
+`CurrencyCode(nullable=True, unique=False) -> Field`
+
+Schema field type that validates 3-letter uppercase ISO 4217 currency codes such as `USD`, `EUR`, and `INR`.
+
+Raises `ValueError` or `TypeError` for invalid field options.
+
+```python
+schema = ar.Schema({"currency": ar.CurrencyCode()})
+```
+
+### LanguageCode
+
+`LanguageCode(nullable=True, unique=False, severity="error", required_if=None) -> Field`
+
+Schema field type that validates lowercase ISO 639-1 language codes such as `en`, `hi`, and `fr`.
+
+Raises `ValueError` or `TypeError` for invalid field options.
+
+```python
+schema = ar.Schema({"language": ar.LanguageCode()})
+```
+
+### PhoneNumber
+
+`PhoneNumber(nullable=True, unique=False, severity="error", required_if=None) -> Field`
+
+Schema field type that validates common international and formatted phone number strings.
+
+Raises `ValueError` or `TypeError` for invalid field options.
+
+```python
+schema = ar.Schema({"phone": ar.PhoneNumber(nullable=False)})
+```
+
+### Regex
+
+`Regex(pattern, nullable=True, unique=False, severity="error", required_if=None) -> Field`
+
+Schema field type that validates string values against a regular expression pattern.
+
+Raises `re.error` when the pattern is invalid, plus the usual field-option validation errors.
+
+```python
+schema = ar.Schema({"user_code": ar.Regex(r"^USR-\d{4}$", nullable=False)})
+```
+
+### register_validator
+
+`register_validator(name, fn) -> None`
+
+Registers a named custom validator function for use in `Custom` schema fields. The function receives a single value and must return `bool`.
+
+Raises `TypeError` if `fn` is not callable and `ValueError` if `name` is not a non-empty string.
+
+```python
+ar.register_validator("positive", lambda v: v > 0)
+```
+
+### Custom
+
+`Custom(name, *, nullable=True, unique=False, severity="error") -> Field`
+
+Schema field type that validates values with a named custom validator registered via `register_validator()`.
+
+Raises `ValueError` if the validator name has not been registered, plus the usual field-option validation errors.
+
+```python
+ar.register_validator("positive", lambda v: v > 0)
+schema = ar.Schema({"score": ar.Custom("positive", nullable=False)})
+```
+
+### SchemaDiffEntry
+
+A single entry in a `SchemaDiff` result describing one difference between two schemas. It stores the column name, the kind of difference, and the expected and observed values.
+
+```python
+diff = ar.diff_schema(expected, observed)
+print(diff.differences[0])
+```
+
+### SchemaDiff
+
+Return type of `diff_schema()`. It holds a list of `SchemaDiffEntry` objects and exposes `summary()` and `to_markdown()` methods.
+
+```python
+diff = ar.diff_schema(expected, observed)
+print(diff.summary())
+```
+
+### diff_schema
+
+`diff_schema(expected, observed) -> SchemaDiff`
+
+Compares two `Schema` objects and returns a `SchemaDiff` describing columns that were added, removed, or changed between the expected and observed schemas.
+
+Raises the same schema-construction errors as `Schema` when either input cannot be interpreted as a schema.
+
+```python
+diff = ar.diff_schema(expected, observed)
+print(diff.to_markdown())
+```
+
+### schema_to_dict
+
+`schema_to_dict(schema) -> dict`
+
+Serializes a `Schema` object to a plain Python `dict`. It is equivalent to `schema.to_json()` parsed as a dict.
+
+Raises `TypeError` when the input is neither a `Schema`-like object nor a plain mapping.
+
+```python
+payload = ar.schema_to_dict(schema)
+```
+
+### schema_to_yaml
+
+`schema_to_yaml(schema) -> str`
+
+Serializes a `Schema` object to a YAML string. This is useful for storing data contracts in version-controlled config files.
+
+Raises `TypeError` when the input cannot be converted to a schema structure.
+
+```python
+print(ar.schema_to_yaml(schema))
+```
+
+## Exceptions
+
+### JsonlReadError
+
+Raised by `read_jsonl()` when a line contains invalid JSON or the file cannot be parsed as JSON Lines. The error message includes the 1-based line number of the offending line.
+
+```python
+try:
+    ar.read_jsonl("bad.jsonl")
+except ar.JsonlReadError as exc:
+    print(exc)
+```
+
+### PipelineStepError
+
+Raised when a registered custom Python pipeline step raises an unhandled exception during execution. It wraps the original exception with step name and index context.
+
+```python
+def boom(df):
+    raise RuntimeError("boom")
+
+ar.register_step("boom", boom)
+try:
+    ar.pipeline(frame, [("boom",)])
+except ar.PipelineStepError as exc:
+    print(exc.step_name)
+```
+
+## I/O and Conversion
+
+### read_csv_chunked
+
+`read_csv_chunked(path, chunk_size=10000, **kwargs) -> Iterator[ArFrame]`
+
+Reads a CSV file in chunks and yields `ArFrame` objects of up to `chunk_size` rows. It accepts the same keyword arguments as `read_csv`, which makes it useful for large files that should not be fully loaded into memory.
+
+Raises the same file and parse errors as `read_csv`, plus `TypeError` or `ValueError` for invalid chunk sizes or CSV options.
+
+```python
+for chunk in ar.read_csv_chunked("huge.csv"):
+    process(chunk)
+```
+
+### read_jsonl
+
+`read_jsonl(path, nrows=None, encoding="utf-8") -> ArFrame`
+
+Parses a JSON Lines (NDJSON) file into an `ArFrame`. Blank lines are skipped, missing keys become nulls, and mixed-type columns are coerced to string. Invalid JSON is reported with a 1-based line number.
+
+Raises `JsonlReadError` when the file cannot be parsed, including invalid JSON, decode failures, or an empty data file. Raises `ValueError` or `TypeError` for invalid arguments.
+
+```python
+frame = ar.read_jsonl("events.jsonl", nrows=1000)
+```
+
+### write_parquet
+
+`write_parquet(frame, path, compression="snappy", row_group_size=None) -> None`
+
+Exports an `ArFrame` to a Parquet file via `pyarrow`. Accepted compression codecs are `"snappy"` (default), `"gzip"`, `"zstd"`, `"brotli"`, and `"none"`. Install the optional extra with `pip install arnio[parquet]`.
+
+Raises `ImportError` if `pyarrow` is not installed. Raises `ValueError` or `TypeError` for unsupported paths, codecs, or row-group sizes.
+
+```python
+ar.write_parquet(frame, "output.parquet", compression="zstd")
+```
+
+### to_arrow
+
+`to_arrow(frame) -> pyarrow.Table`
+
+Converts an `ArFrame` to a `pyarrow.Table` for zero-copy interop with Arrow-native tools. Requires `pyarrow`.
+
+Raises `ImportError` if `pyarrow` is not installed and `TypeError` if the input is not an `ArFrame`.
+
+```python
+table = ar.to_arrow(frame)
+```
+
+### from_records
+
+`from_records(records, columns=None) -> ArFrame`
+
+Builds an `ArFrame` from a list of dicts or a list of lists/tuples. When using list-of-dicts, column names are inferred from keys. When using list-of-lists, `columns` must be supplied. Missing keys in dict records are filled with `None`, nested values raise `TypeError`, and an empty list raises `ValueError`. Also available as `ArFrame.from_records`.
+
+Raises `TypeError` or `ValueError` for invalid record shapes or column definitions.
+
+```python
+frame = ar.from_records([{"id": 1, "name": "alice"}, {"id": 2, "name": "bob"}])
+```
+
+## Cleaning Primitives
+
+### normalize_whitespace
+
+`normalize_whitespace(frame) -> ArFrame`
+
+Collapses internal runs of whitespace in string columns to a single space and trims leading/trailing spaces.
+
+Raises the usual input-validation errors for invalid frames or other malformed inputs.
+
+```python
+clean = ar.normalize_whitespace(frame)
+```
+
+### drop_empty_columns
+
+`drop_empty_columns(frame) -> ArFrame`
+
+Removes columns whose values are entirely null or empty strings. Strings containing only whitespace are treated as empty.
+
+Raises the usual input-validation errors for invalid frames or malformed inputs.
+
+```python
+clean = ar.drop_empty_columns(frame)
+```
+
+### winsorize_outliers
+
+`winsorize_outliers(frame, lower=0.05, upper=0.95, subset=None) -> ArFrame`
+
+Clips extreme numeric values using lower and upper quantile bounds. Non-numeric columns are ignored unless explicitly listed in `subset`. It is also available as a pipeline step.
+
+Raises `ValueError` for invalid quantile bounds and `TypeError` for invalid arguments.
+
+```python
+clean = ar.winsorize_outliers(frame, lower=0.05, upper=0.95)
+```
+
+### coalesce_columns
+
+`coalesce_columns(frame, subset, output_column) -> ArFrame`
+
+Returns the first non-null value from the columns listed in `subset` into a new column named `output_column`.
+
+Raises the usual validation errors for missing columns or invalid `subset` values.
+
+```python
+clean = ar.coalesce_columns(frame, subset=["phone", "mobile"], output_column="contact")
+```
+
+### drop_columns_matching
+
+`drop_columns_matching(frame, pattern) -> ArFrame`
+
+Drops all columns whose names match the given regex pattern.
+
+Raises `ValueError` or the underlying regex error if the pattern is invalid.
+
+```python
+clean = ar.drop_columns_matching(frame, pattern="^temp_")
+```
+
+### parse_bool_strings
+
+`parse_bool_strings(frame) -> ArFrame`
+
+Normalizes string values such as `"yes"`, `"no"`, `"true"`, `"false"`, `"y"`, `"n"`, `"1"`, and `"0"` into boolean values. Unsupported values are left unchanged.
+
+Raises the usual input-validation errors for invalid frames or malformed inputs.
+
+```python
+clean = ar.parse_bool_strings(frame)
+```
+
+### standardize_missing_tokens
+
+`standardize_missing_tokens(frame) -> ArFrame`
+
+Replaces common missing-value sentinel strings such as `"N/A"`, `"NULL"`, `"none"`, and `"-"` with real nulls. This helper runs via the Python backend.
+
+Raises the usual input-validation errors for invalid frames or malformed inputs.
+
+```python
+clean = ar.standardize_missing_tokens(frame)
+```
+
+## Pipeline and Step Registry
+
+### register_duckdb
+
+`register_duckdb(frame, conn, table_name) -> None`
+
+Registers an `ArFrame` directly as a DuckDB relation under `table_name` on the given DuckDB connection. DuckDB is an optional dependency; install it with `pip install duckdb`.
+
+Raises `TypeError` or `ValueError` if the frame or table name is invalid.
+
+```python
+import duckdb
+ar.register_duckdb(frame, duckdb.connect(), "my_table")
+```
+
+### get_builtin_step_signatures
+
+`get_builtin_step_signatures() -> dict[str, inspect.Signature]`
+
+Returns a mapping of built-in step names to their `inspect.Signature` objects. Use this to inspect which keyword arguments a step accepts before assembling a pipeline.
+
+Raises no Arnio-specific exceptions.
+
+```python
+signatures = ar.get_builtin_step_signatures()
+print(signatures["drop_nulls"])
+```
+
+### list_steps
+
+`list_steps() -> list[str]`
+
+Returns the names of all currently registered pipeline steps, including both built-in C++ steps and any registered custom Python steps.
+
+Raises no Arnio-specific exceptions.
+
+```python
+print(ar.list_steps())
+```
+
+### PipelineContext
+
+A context object optionally passed to custom pipeline step functions. Available attributes include `step_name: str`, `step_index: int`, and `total_steps: int`. Opt in by declaring `context=None` in the step function signature.
+
+```python
+def annotate(df, context=None):
+    print(context.step_name, context.step_index)
+    return df
+```
+
+### reset_steps
+
+`reset_steps() -> None`
+
+Resets the step registry to built-in steps only, removing all registered custom Python steps. This is useful for test isolation.
+
+Raises no Arnio-specific exceptions.
+
+```python
+ar.reset_steps()
+```
 
 ## Prerequisites
 
@@ -50,6 +510,17 @@ print(f"Memory: {df.memory_usage()} bytes")
 print(df.preview())
 df = df.select_columns(columns=["id", "name"])
 df = df.select_dtypes(include=["int64", "float64"])
+```
+
+### ColumnSummary
+
+`ColumnSummary(name, dtype, nullable)`
+
+Schema summary for a single column, typically returned by `ArFrame.schema_summary`. It stores the column name, inferred dtype, and nullability flag, and supports equality comparison and a readable `repr`.
+
+```python
+summary = ar.ColumnSummary("email", "string", True)
+print(summary.name, summary.dtype, summary.nullable)
 ```
 
 ---
